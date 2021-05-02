@@ -1,14 +1,16 @@
 # Create a new note, write something, submit to https://studies.cs.helsinki.fi/exampleapp/notes
 
-newnote over browser:
+note over browser:
 browser input element got focus
 that input element got some text
-browser executes the event handler
+browser executes the submit event handler
+end note
+
 browser->server: HTTP POST /exampleapp/new_note note=hello+world
-server execute save procedure
-end newnote
-
-
+note over server:
+server save the new note and redirect to note list page
+end note
+server->browser: 301 https://studies.cs.helsinki.fi/exampleapp/notes
 browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
 browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
 
@@ -21,6 +23,7 @@ browser->server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
 server->browser: [{ content: "HTML is easy", date: "2019-05-23" }, ...]
 
 note over browser:
-browser executes the event handler
+browser executes the onreadystatechange event handler
 that renders notes to display
 end note
+

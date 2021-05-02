@@ -1,0 +1,21 @@
+# Create a diagram depicting the situation where the user creates a new note using the single page version of the app.
+
+note over browser:
+\#notes_form input element got focus
+that input element got some text
+browser executes the submit event handler
+end note
+
+note over browser:
+submit event handler
+1. push the new note into the note list
+2. redraw the list
+3. send the new note to the server
+end note
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa {"content":"hello world","date":"2021-05-02T07:50:07.309Z"}
+
+note over server:
+save the new note
+and response a json string '{"message":"note created"}'
+end note
