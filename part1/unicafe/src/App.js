@@ -40,8 +40,8 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0)
   const getAll = () => good + neutral + bad
-  const getAverage = () => getAll() / 3
-  const getPositive = () => good / getAll() + ' %'
+  const getAverage = () => (good - bad) / getAll()
+  const getPositive = () => good * 100 / getAll() + ' %'
   const getDataList = () => ({
     good,
     neutral,
