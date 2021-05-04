@@ -16,7 +16,6 @@ const Row = ({title, value}) => {
 }
 
 const Content = ({dataList}) => {
-  console.log(dataList.all)
   if (dataList.all === 0)
     return <p>No feedback given</p>
   return (
