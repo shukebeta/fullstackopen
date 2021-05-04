@@ -1,5 +1,6 @@
 import React from 'react'
 import Course from "./components/Course"
+import {nanoid} from 'nanoid'
 
 const App = () => {
   const courses = [
@@ -50,7 +51,7 @@ const App = () => {
   return (
     <div>
       {
-        courses.map(course => <Course course={course}/>)
+        courses.map(course => <Course course={course} key={nanoid()}/>)
       }
     </div>
   )
