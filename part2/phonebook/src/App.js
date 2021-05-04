@@ -1,15 +1,11 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import NewContactForm from "./components/NewContactForm"
 import Contacts from "./components/Contacts"
 import Filter from "./components/Filter"
+import axios from 'axios'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    {name: 'Arto Hellas', number: '040-123456'},
-    {name: 'Ada Lovelace', number: '39-44-5323523'},
-    {name: 'Dan Abramov', number: '12-43-234345'},
-    {name: 'Mary Poppendieck', number: '39-23-6423122'},
-  ])
+  const [persons, setPersons] = useState([])
 
   const [newName, setNewName] = useState('')
   const onNameChange = (evt) => {
@@ -33,10 +29,20 @@ const App = () => {
     setNewName('')
     setNewNumber('')
   }
+
   const [keyword, setKeyword] = useState('')
   const onKeywordInput = (evt) => {
     setKeyword(evt.target.value)
   }
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(_ => {
+        setPersons(_.data)
+      })
+  }, [])
+
   return (
     <div>
       <h2>Phonebook</h2>
