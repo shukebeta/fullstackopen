@@ -11,6 +11,10 @@ const App = () => {
   const onKeywordInput = (evt) => {
     setKeyword(evt.target.value)
   }
+  const [shownCountry, setShownCountry] = useState(null)
+  const onCountryClick = (name) => {
+    setShownCountry(countries.find(_ => _.name === name))
+  }
 
   useEffect(() => {
     axios
@@ -24,7 +28,7 @@ const App = () => {
     <div>
       <h2>Data for countries</h2>
       <Filter keyword={keyword} onKeywordInput={onKeywordInput}/>
-      <Countries countries={countries} keyword={keyword}/>
+      <Countries countries={countries} shownCountry={shownCountry} keyword={keyword} onCountryClick={onCountryClick}/>
     </div>
   )
 }
