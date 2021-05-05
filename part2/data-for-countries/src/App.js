@@ -9,6 +9,7 @@ const App = () => {
 
   const [keyword, setKeyword] = useState('')
   const onKeywordInput = (evt) => {
+    setShownCountry(null)
     setKeyword(evt.target.value)
   }
   const [shownCountry, setShownCountry] = useState(null)
