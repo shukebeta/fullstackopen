@@ -1,5 +1,6 @@
 import React from 'react'
 import {nanoid} from 'nanoid'
+import Weather from "./Weather"
 
 const CountryInfo = ({data}) => {
   if (data === null) {
@@ -17,6 +18,7 @@ const CountryInfo = ({data}) => {
         {data.languages.map(_ => <li key={nanoid()}>{_.name}</li>)}
       </ul>
       <p><img alt={`${data.name}'s flag`} className="flag" src={data.flag} /></p>
+      <Weather cityName={data.capital} />
     </>
   )
 }
