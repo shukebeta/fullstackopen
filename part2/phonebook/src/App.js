@@ -3,9 +3,13 @@ import NewContactForm from "./components/NewContactForm"
 import Contacts from "./components/Contacts"
 import Filter from "./components/Filter"
 import {getAll, create, update, remove} from './api/persons'
+import {ErrorMessage, SuccessMessage} from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
+
+  const [successMessage, setSuccessMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const [newName, setNewName] = useState('')
   const onNameChange = (evt) => {
@@ -23,11 +27,16 @@ const App = () => {
     const number = newNumber.trim()
     if (!name || !number) return
     const existContact = persons.find(_ => _.name.toLowerCase() === name.toLowerCase())
-    if (existContact !== null && window.confirm(`${existContact.name} is already added to phonebook,replace the old number with a new one?`)) {
+    console.log(',,,', existContact)
+    if (existContact !== undefined && window.confirm(`${existContact.name} is already added to phonebook,replace the old number with a new one?`)) {
       update(existContact.id, {...existContact, number}).then(updatedContact => {
         setPersons(persons.map(_ => _.id === existContact.id ? updatedContact : _))
         setNewName('')
         setNewNumber('')
+      }).catch(_ => {
+        setErrorMessage(`Information of ${existContact.name} has already been removed from server.`)
+        setPersons(persons.filter(_ => _.id !== existContact.id))
+        setTimeout(() => setErrorMessage(''), 3000)
       })
     } else {
       create({
@@ -36,6 +45,8 @@ const App = () => {
         setPersons([...persons, newContact])
         setNewName('')
         setNewNumber('')
+        setSuccessMessage(`Added ${name}`)
+        setTimeout(() => setSuccessMessage(''), 3000)
       })
     }
   }
@@ -46,7 +57,7 @@ const App = () => {
   }
   const onRemoveClick = (id) => {
     const contact = persons.find(_ => _.id === id)
-    if (contact !== null && window.confirm(`Delete ${contact.name}?`)) {
+    if (contact !== undefined && window.confirm(`Delete ${contact.name}?`)) {
       remove(id).then(() => {
         setPersons(persons.filter(_ => _.id !== id))
       })
@@ -63,7 +74,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-
+      <ErrorMessage message={errorMessage}/>
+      <SuccessMessage message={successMessage}/>
       <Filter keyword={keyword} onKeywordInput={onKeywordInput}/>
       <h3>Add a new</h3>
       <NewContactForm values={{newName, newNumber}} events={{onNameChange, onNumberChange, onSubmitContact}}/>
