@@ -1,0 +1,10 @@
+ul li {
+      list-style: none;
+}
+
+ul.language li {
+      list-style: initial;
+}
+img.flag {
+      width: 6em;
+}
