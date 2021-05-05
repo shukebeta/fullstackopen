@@ -13,3 +13,7 @@ export const update = (id, person) => {
   return axios.put(`${baseUrl}/${id}`, person).then(_ => _.data)
 }
 
+export const remove = (id) => {
+  return axios.delete(`${baseUrl}/${id}`)
+}
+

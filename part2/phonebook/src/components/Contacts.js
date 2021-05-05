@@ -2,7 +2,7 @@ import React from 'react'
 import Contact from "./Contact";
 import {nanoid} from 'nanoid'
 
-const Contacts = ({persons, keyword}) => {
+const Contacts = ({persons, keyword, onRemoveClick}) => {
   const key = keyword.trim().toLowerCase()
   let contacts = [...persons]
   if (key) {
@@ -11,7 +11,7 @@ const Contacts = ({persons, keyword}) => {
   return (
     <div>
       {
-        contacts.map((_) => <Contact name={_.name} number={_.number} key={nanoid()} />)
+        contacts.map((_) => <Contact person={_} onRemoveClick={onRemoveClick} key={nanoid()} />)
       }
     </div>
   )
