@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import NewContactForm from "./components/NewContactForm"
 import Contacts from "./components/Contacts"
 import Filter from "./components/Filter"
-import axios from 'axios'
+import {getAll, create, update} from './api/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -19,15 +19,16 @@ const App = () => {
 
   const onSubmitContact = (evt) => {
     evt.preventDefault()
-    if (!newName.trim() || !newNumber.trim()) return
-    const newPersons = [...persons]
-    newPersons.push({
-      name: newName.trim(),
-      number: newNumber.trim(),
+    const name = newName.trim()
+    const number = newNumber.trim()
+    if (!name || !number) return
+    create({
+      name, number
+    }).then(newContact => {
+      setPersons([...persons, newContact])
+      setNewName('')
+      setNewNumber('')
     })
-    setPersons(newPersons)
-    setNewName('')
-    setNewNumber('')
   }
 
   const [keyword, setKeyword] = useState('')
@@ -36,10 +37,9 @@ const App = () => {
   }
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
+    getAll()
       .then(_ => {
-        setPersons(_.data)
+        setPersons(_)
       })
   }, [])
 
