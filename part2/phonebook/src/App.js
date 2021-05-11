@@ -27,7 +27,6 @@ const App = () => {
     const number = newNumber.trim()
     if (!name || !number) return
     const existContact = persons.find(_ => _.name.toLowerCase() === name.toLowerCase())
-    console.log(',,,', existContact)
     if (existContact !== undefined && window.confirm(`${existContact.name} is already added to phonebook,replace the old number with a new one?`)) {
       update(existContact.id, {...existContact, number}).then(updatedContact => {
         setPersons(persons.map(_ => _.id === existContact.id ? updatedContact : _))
