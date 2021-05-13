@@ -21,22 +21,22 @@ const App = () => {
     setNewNumber(evt.target.value)
   }
 
-  const onSubmitContact = (evt) => {
+  const onSubmitContact = async (evt) => {
     evt.preventDefault()
     const name = newName.trim()
     const number = newNumber.trim()
     if (!name || !number) return
     const existContact = persons.find(_ => _.name.toLowerCase() === name.toLowerCase())
     if (existContact !== undefined && window.confirm(`${existContact.name} is already added to phonebook,replace the old number with a new one?`)) {
-      update(existContact.id, {...existContact, number}).then(updatedContact => {
+      try {
+        const updatedContact = await update(existContact.id, {...existContact, number})
         setPersons(persons.map(_ => _.id === existContact.id ? updatedContact : _))
         setNewName('')
         setNewNumber('')
-      }).catch(_ => {
-        setErrorMessage(`Information of ${existContact.name} has already been removed from server.`)
-        setPersons(persons.filter(_ => _.id !== existContact.id))
+      } catch (e) {
+        setErrorMessage(e.response.data.error)
         setTimeout(() => setErrorMessage(''), 3000)
-      })
+      }
     } else {
       create({
         name, number,
