@@ -15,15 +15,19 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true,
 const blogSchema = new mongoose.Schema({
   title: {
     type: String,
+    required: true,
   },
   author: {
     type: String,
+    default: 'anonymous',
   },
   url: {
     type: String,
+    required: true,
   },
   likes: {
     type: Number,
+    default: 0,
   },
 })
 
