@@ -4,11 +4,15 @@ const info = (...params) => {
     console.log(...params)
 }
 
+const log = (...params) => {
+  console.log(...params)
+}
+
 const error = (...params) => {
   if (!isTestEnv)
     console.error(...params)
 }
 
 module.exports = {
-  info, error,
+  info, error, log,
 }

@@ -34,6 +34,8 @@ module.exports = {
     'arrow-spacing': [
       'error', { 'before': true, 'after': true },
     ],
+    'no-multi-spaces': 'error',
+    'space-infix-ops': 'error',
     'no-console': 0,
   },
 }

@@ -5,6 +5,7 @@ const app = require('../app')
 const api = supertest(app)
 
 const Blog = require('../models/blog')
+const logger = require('../utils/logger')
 
 const initialBlogs = [
   {
@@ -26,14 +27,8 @@ beforeEach(async () => {
 })
 
 describe('test blogs api', () => {
-  test('blogs are returned as json', async () => {
-    await api
-      .get('/api/blogs')
-      .expect(200)
-      .expect('Content-Type', /application\/json/i)
-  })
-  test('blogs count should be 2', async () => {
-    const response = await api.get('/api/blogs')
+  test('blogs are returned as json array with length: 2', async () => {
+    const response = await api.get('/api/blogs').expect(200).expect('Content-Type', /application\/json/i)
     expect(response.body).toHaveLength(2)
   })
 })
