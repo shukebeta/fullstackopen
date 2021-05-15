@@ -33,12 +33,14 @@ describe('test blogs api', () => {
     expect(response.body).toHaveLength(2)
   })
   test('id property is named', async () => {
-    const response = await api.post('/api/blogs').send({
+    const blog = {
       title: 'new test',
       author: 'new test',
       url: 'https://stackoverflow.com',
-    }).expect(201)
+    }
+    const response = await api.post('/api/blogs').send(blog).expect(201)
     expect(response.body.id).toBeDefined()
+    expect(response.body.url).toBe(blog.url)
   })
 })
 
