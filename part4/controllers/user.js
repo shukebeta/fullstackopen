@@ -3,9 +3,13 @@ const saltRounds = 10
 
 const usersRouter = require('express').Router()
 const User = require('../models/user')
+const { ValidationError } = require('../Exceptions/ValidationError')
 
 usersRouter.post('/', async (request, response) => {
   const { name, username, password } = request.body
+  if (password.length < 3) {
+    throw new ValidationError('password too short: it should be at least 3 chars long.')
+  }
   const passwordHash = await bcrypt.hash(password, saltRounds)
   const user = new User({
     name,
