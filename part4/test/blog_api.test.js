@@ -21,10 +21,8 @@ const initialBlogs = [
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  for(const _ of initialBlogs) {
-    const blog = new Blog(_)
-    await blog.save()
-  }
+  const promiseAll = initialBlogs.map(_ => (new Blog(_)).save())
+  await Promise.all(promiseAll)
 })
 
 describe('test blogs api', () => {
@@ -33,6 +31,10 @@ describe('test blogs api', () => {
       .get('/api/blogs')
       .expect(200)
       .expect('Content-Type', /application\/json/i)
+  })
+  test('blogs count should be 2', async () => {
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(2)
   })
 })
 
