@@ -1,15 +1,15 @@
+const {MONGODB_URI} = require('../config')
+const logger = require('../utils/logger')
 const mongoose = require('mongoose')
 mongoose.set('returnOriginal', false)
 
-const url = process.env.MONGO_CONNECTION_STRING
-
-console.log('connecting to', url)
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+console.log('connecting to', MONGODB_URI)
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
   .then(() => {
-    console.log('connected to MongoDB')
+    logger.info('connected to MongoDB')
   })
   .catch((error) => {
-    console.log('error connecting to MongoDB:', error.message)
+    logger.error('error connecting to MongoDB:', error.message)
   })
 
 const blogSchema = new mongoose.Schema({
