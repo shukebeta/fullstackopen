@@ -1,4 +1,4 @@
-const {MONGODB_URI} = require('../config')
+const { MONGODB_URI } = require('../config')
 const logger = require('../utils/logger')
 const mongoose = require('mongoose')
 mongoose.set('returnOriginal', false)

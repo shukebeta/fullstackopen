@@ -5,17 +5,18 @@ const app = require('../app')
 const api = supertest(app)
 
 const Blog = require('../models/blog')
-const logger = require('../utils/logger')
 
 const initialBlogs = [
   {
     title: 'HTML is easy',
     author: 'be ta',
+    url: 'https://google.com',
     likes: 3,
   },
   {
     title: 'Browser can execute only Javascript',
     author: 'be ta',
+    url: 'https://google.com',
     likes: 3,
   },
 ]
@@ -31,8 +32,16 @@ describe('test blogs api', () => {
     const response = await api.get('/api/blogs').expect(200).expect('Content-Type', /application\/json/i)
     expect(response.body).toHaveLength(2)
   })
+  test('id property is named', async () => {
+    const response = await api.post('/api/blogs').send({
+      title: 'new test',
+      author: 'new test',
+      url: 'https://stackoverflow.com',
+    }).expect(201)
+    expect(response.body.id).toBeDefined()
+  })
 })
 
-afterAll(() => {
-  mongoose.connection.close()
+afterAll(async () => {
+  await mongoose.connection.close()
 })
