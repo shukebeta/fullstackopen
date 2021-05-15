@@ -1,28 +1,28 @@
 const listHelper = require('../utils/list_helper')
 const listOfBlog = [
   {
-    title: "hello0",
-    author: "be ta",
+    title: 'hello0',
+    author: 'be ta',
     likes: 3
   },
   {
-    title: "hello1",
-    author: "be ta",
+    title: 'hello1',
+    author: 'be ta',
     likes: 4
   },
   {
-    title: "hello2",
-    author: "shu ke",
+    title: 'hello2',
+    author: 'shu ke',
     likes: 1
   },
   {
-    title: "hello3",
-    author: "shu ke",
+    title: 'hello3',
+    author: 'shu ke',
     likes: 2
   },
   {
-    title: "hello4",
-    author: "shu ke",
+    title: 'hello4',
+    author: 'shu ke',
     likes: 3
   },
 ]

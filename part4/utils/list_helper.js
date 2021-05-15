@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const reducer = (sum, {likes}) => sum + (likes || 0)
+const reducer = (sum, { likes }) => sum + (likes || 0)
 const descSorter = (fieldName) => (i, j) => i[fieldName] > j[fieldName] ? -1 : (i[fieldName] === [fieldName] ? 0 : 1)
 const ascSorter = (fieldName) => (i, j) => i[fieldName] > j[fieldName] ? 1 : (i[fieldName] === j[fieldName] ? 0 : -1)
 
