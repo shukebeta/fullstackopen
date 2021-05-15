@@ -1,5 +1,5 @@
 
-const logger = require('./utils/logger')
+const logger = require('./logger')
 
 // handler of requests with unknown endpoint
 const unknownEndpoint = (request, response) => {

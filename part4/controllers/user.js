@@ -21,7 +21,7 @@ usersRouter.get('/', async (request, response) => {
   response.json(users)
 })
 
-usersRouter.get('/:id', async (request, response, next) => {
+usersRouter.get('/:id', async (request, response) => {
   const user = await User.findById(request.params.id)
   if (user) {
     response.json(user)
@@ -30,12 +30,12 @@ usersRouter.get('/:id', async (request, response, next) => {
   }
 })
 
-usersRouter.delete('/:id', async (request, response, next) => {
+usersRouter.delete('/:id', async (request, response) => {
   await User.findByIdAndRemove(request.params.id)
   response.status(204).end()
 })
 
-usersRouter.put('/:id', async (request, response, next) => {
+usersRouter.put('/:id', async (request, response) => {
   const { title, author, likes } = request.body
   const updatedUser = await User.findByIdAndUpdate(request.params.id, { title, author, likes })
   response.json(updatedUser)

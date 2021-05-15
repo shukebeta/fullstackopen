@@ -1,6 +1,6 @@
 module.exports = {
   'env': {
-    'browser': true,
+    'node': true,
     'commonjs': true,
     'es2021': true,
     'jest': true,
@@ -36,6 +36,7 @@ module.exports = {
     ],
     'no-multi-spaces': 'error',
     'space-infix-ops': 'error',
+    // 'no-process-env': 'error',
     'no-console': 0,
   },
 }
