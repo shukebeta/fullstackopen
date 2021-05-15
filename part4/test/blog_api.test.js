@@ -1,11 +1,8 @@
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
-
 const api = supertest(app)
-
 const Blog = require('../models/blog')
-const logger = require('../utils/logger')
 
 const initialBlogs = [
   {
@@ -58,7 +55,6 @@ describe('testing new blog api...', () => {
       url: 'https://stackoverflow.com',
     }
     const response = await api.post('/api/blogs').send(blog).expect(201)
-    console.log(response.body)
     expect(response.body.likes).toEqual(0)
   })
 
