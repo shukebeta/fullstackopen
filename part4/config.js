@@ -8,6 +8,7 @@ const PORT = process.env.PORT
 const MONGODB_URI = process.env[mongoDbConfigName]
 
 module.exports = {
+  isTestEnv,
   MONGODB_URI,
-  PORT
+  PORT,
 }
