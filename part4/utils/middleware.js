@@ -1,5 +1,29 @@
-
 const logger = require('./logger')
+const jwt = require('jsonwebtoken')
+const { JWT_SECRET } = require('../config')
+
+const tokenExtractor = (request, response, next) => {
+  const authHeader = request.headers.authorization
+  if (authHeader && authHeader.toLowerCase().startsWith('bearer ')) {
+    request.token = authHeader.substring(7)
+  }
+  next()
+}
+
+const verifyTokenAndGetUid = token => {
+  const decodedToken = jwt.verify(token, JWT_SECRET)
+  if (!token || !decodedToken.id) {
+    return null
+  }
+  return decodedToken.id
+}
+
+const userExtractor = (request, response, next) => {
+  if (request.token) {
+    request.user = verifyTokenAndGetUid(request.token)
+  }
+  next()
+}
 
 // handler of requests with unknown endpoint
 const unknownEndpoint = (request, response) => {
@@ -18,4 +42,4 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
-module.exports = { unknownEndpoint, errorHandler, }
+module.exports = { unknownEndpoint, errorHandler, tokenExtractor, userExtractor }
