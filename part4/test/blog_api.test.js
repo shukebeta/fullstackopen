@@ -32,15 +32,24 @@ const initialUsers = [
     password:'abc123456',
   },
 ]
-
+let token = ''
 beforeEach(async () => {
   await Blog.deleteMany({})
   await User.deleteMany({})
   for(const u of initialUsers) {
     await api.post('/api/users').send(u).expect(201)
   }
+
+  const response = await api.post('/api/login').send({
+    username:'root',
+    password:'abc123456',
+  })
+  token = `Bearer ${response.body.token}`
   for(const b of initialBlogs) {
-    await api.post('/api/blogs').send(b).expect(201)
+    await api
+      .post('/api/blogs')
+      .set('Authorization', token)
+      .send(b).expect(201)
   }
 })
 
@@ -63,7 +72,10 @@ describe('testing new blog api...', () => {
       author: 'new test',
       url: 'https://stackoverflow.com',
     }
-    const response = await api.post('/api/blogs').send(blog).expect(201)
+    const response = await api.post('/api/blogs')
+      .set('Authorization', token)
+      .send(blog)
+      .expect(201)
     expect(response.body.url).toBe(blog.url)
   })
 
@@ -73,7 +85,10 @@ describe('testing new blog api...', () => {
       author: 'new test',
       url: 'https://stackoverflow.com',
     }
-    const response = await api.post('/api/blogs').send(blog).expect(201)
+    const response = await api.post('/api/blogs')
+      .set('Authorization', token)
+      .send(blog)
+      .expect(201)
     expect(response.body.likes).toEqual(0)
   })
 
@@ -83,16 +98,23 @@ describe('testing new blog api...', () => {
       author: 'new test',
       url: 'https://google.com',
     }
-    await api.post('/api/blogs').send({ title: blog.title }).expect(400)
-    await api.post('/api/blogs').send({ url: blog.url }).expect(400)
+    await api.post('/api/blogs')
+      .set('Authorization', token)
+      .send({ title: blog.title }).expect(400)
+    await api.post('/api/blogs')
+      .set('Authorization', token)
+      .send({ url: blog.url }).expect(400)
   })
 })
 
 describe('testing delete a blog api...', () => {
   test('delete blog: delete by id', async () => {
-    const response = await api.get('/api/blogs').expect(200).expect('Content-Type', /application\/json/i)
+    const response = await api.get('/api/blogs')
+      .expect(200).expect('Content-Type', /application\/json/i)
     const id = response.body[0].id
-    await api.delete(`/api/blogs/${id}`).expect(204)
+    await api.delete(`/api/blogs/${id}`)
+      .set('Authorization', token)
+      .expect(204)
   })
 })
 
@@ -101,7 +123,9 @@ describe('testing put blog api...', () => {
     const response = await api.get('/api/blogs')
     const blog = response.body[0]
     const newBlog = { ...blog, likes: blog.likes + 1 }
-    const updatedBlog = (await api.put(`/api/blogs/${newBlog.id}`).send(newBlog)).body
+    const updatedBlog = (await api.put(`/api/blogs/${newBlog.id}`)
+      .set('Authorization', token)
+      .send(newBlog)).body
     expect(updatedBlog.likes).toEqual(blog.likes + 1)
   })
 })
