@@ -3,6 +3,7 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const initialBlogs = [
   {
@@ -19,10 +20,28 @@ const initialBlogs = [
   },
 ]
 
+const initialUsers = [
+  {
+    name:'Root Wei',
+    username:'root',
+    password:'abc123456',
+  },
+  {
+    name:'David Wei',
+    username:'shukebeta',
+    password:'abc123456',
+  },
+]
+
 beforeEach(async () => {
   await Blog.deleteMany({})
-  const promiseAll = initialBlogs.map(_ => (new Blog(_)).save())
-  await Promise.all(promiseAll)
+  await User.deleteMany({})
+  for(const u of initialUsers) {
+    await api.post('/api/users').send(u).expect(201)
+  }
+  for(const b of initialBlogs) {
+    await api.post('/api/blogs').send(b).expect(201)
+  }
 })
 
 describe('testing get blogs api...', () => {

@@ -38,5 +38,6 @@ module.exports = {
     'space-infix-ops': 'error',
     // 'no-process-env': 'error',
     'no-console': 0,
+    'comma-dangle': ['error', 'always-multiline'],
   },
 }
