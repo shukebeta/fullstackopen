@@ -25,13 +25,16 @@ const App = () => {
     evt.preventDefault()
     let {username, password} = loginForm
     username = username.trim()
-    if (!username || !password) return
+    if (!username || !password) {
+      showErrorMessage('username and password cannot be empty')
+      return
+    }
     try {
       const token = await doLogin({username, password})
-      console.log(token)
       setToken(token)
     } catch (e) {
       console.log(e)
+      showErrorMessage('wrong username or password')
     }
   }
 
@@ -81,12 +84,12 @@ const App = () => {
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
-  const showSuccessMessage = (message, timeout=3000) => {
+  const showSuccessMessage = (message, timeout = 3000) => {
     setSuccessMessage(message)
     setTimeout(() => setSuccessMessage(''), timeout)
   }
 
-  const showErrorMessage = (message, timeout=3000) => {
+  const showErrorMessage = (message, timeout = 3000) => {
     setErrorMessage(message)
     setTimeout(() => setErrorMessage(''), timeout)
   }
@@ -96,6 +99,7 @@ const App = () => {
     const {title, url, author} = blog
     if (!title || !url) {
       showErrorMessage('title and url cannot be empty')
+      return
     }
     try {
       const newBlog = await add(blog, token)
@@ -108,7 +112,9 @@ const App = () => {
   }
 
   if (!token) {
-    return <Login values={loginForm} events={{onUsernameChange, onPasswordChange, loginHandler}}/>
+    return (
+      <Login values={{...loginForm, errorMessage, successMessage}} events={{onUsernameChange, onPasswordChange, loginHandler}}/>
+    )
   } else {
     return (
       <div>
