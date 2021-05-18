@@ -2,6 +2,10 @@ const logger = require('./logger')
 const jwt = require('jsonwebtoken')
 const { JWT_SECRET } = require('../config')
 
+const morgan = require('morgan')
+morgan.token('post-data', (req) => req.method === 'POST' || req.method === 'PUT' ? JSON.stringify(req.body) : '')
+const requestLogger = morgan(':method :url :status :response-time :post-data')
+
 const tokenExtractor = (request, response, next) => {
   const authHeader = request.headers.authorization
   if (authHeader && authHeader.toLowerCase().startsWith('bearer ')) {
@@ -42,4 +46,10 @@ const errorHandler = (error, request, response, next) => {
   next(error)
 }
 
-module.exports = { unknownEndpoint, errorHandler, tokenExtractor, userExtractor }
+module.exports = {
+  unknownEndpoint,
+  errorHandler,
+  tokenExtractor,
+  userExtractor,
+  requestLogger,
+}
