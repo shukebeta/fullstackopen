@@ -1,7 +1,6 @@
 import React from 'react'
 
 const NewBlog = ({values, events}) => {
-  if (!values.showNewBlogForm) return ""
   return (
     <form onSubmit={events.onSubmitBlog}>
       <div>title: <input value={values.blog.title} onChange={events.onFieldChange('title')}/></div>

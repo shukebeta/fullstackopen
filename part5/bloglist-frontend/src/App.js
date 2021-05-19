@@ -6,6 +6,7 @@ import {doLogin} from './services/login'
 import {getAll, add} from "./services/blogs"
 import {SuccessMessage, ErrorMessage} from "./components/public/Notification"
 import NewBlog from "./components/NewBlog"
+import Togglable from "./components/public/Togglable"
 
 const App = () => {
   const [token, setToken] = useState('')
@@ -80,7 +81,6 @@ const App = () => {
     setBlog(newValue)
   }
 
-  const [showNewBlogForm, setShowNewBlogForm] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -113,7 +113,8 @@ const App = () => {
 
   if (!token) {
     return (
-      <Login values={{...loginForm, errorMessage, successMessage}} events={{onUsernameChange, onPasswordChange, loginHandler}}/>
+      <Login values={{...loginForm, errorMessage, successMessage}}
+             events={{onUsernameChange, onPasswordChange, loginHandler}}/>
     )
   } else {
     return (
@@ -122,8 +123,9 @@ const App = () => {
         <ErrorMessage message={errorMessage}/>
         <SuccessMessage message={successMessage}/>
         <UserInfo loginForm={loginForm} logoutHandler={logoutHandler}/>
-        <button onClick={() => setShowNewBlogForm(!showNewBlogForm)}>add blog</button>
-        <NewBlog values={{blog, showNewBlogForm}} events={{onFieldChange, onSubmitBlog}}/>
+        <Togglable buttonLabel="new blog">
+          <NewBlog values={{blog, showNewBlogForm}} events={{onFieldChange, onSubmitBlog}}/>
+        </Togglable>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog}/>,
         )}
