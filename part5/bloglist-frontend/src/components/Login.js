@@ -1,5 +1,5 @@
 import React from 'react'
-import {ErrorMessage, SuccessMessage} from "./Notification"
+import {ErrorMessage, SuccessMessage} from "./public/Notification"
 const Login = ({values, events}) => (
   <div>
     <h2>log in to application</h2>

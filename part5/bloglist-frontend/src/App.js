@@ -4,7 +4,7 @@ import Login from "./components/Login"
 import UserInfo from "./components/UserInfo"
 import {doLogin} from './services/login'
 import {getAll, add} from "./services/blogs"
-import {SuccessMessage, ErrorMessage} from "./components/Notification"
+import {SuccessMessage, ErrorMessage} from "./components/public/Notification"
 import NewBlog from "./components/NewBlog"
 
 const App = () => {
