@@ -1,3 +1,18 @@
+button {
+    margin-left: 0.5em;
+}
+div.blogItem, div.blogDetail {
+    border: 1px solid;
+}
+div.blogDetail {
+    background: #cfc;
+}
+div.blogItem p, div.blogDetail p {
+    padding: 0 0.5em;
+}
+div {
+    margin: 0.1em 0;
+}
 .error {
     color: red;
     background: lightgrey;

@@ -7,7 +7,9 @@ import {getAll, add} from "./services/blogs"
 import {SuccessMessage, ErrorMessage} from "./components/public/Notification"
 import NewBlog from "./components/NewBlog"
 import Togglable from "./components/public/Togglable"
-import {getTokenFromStorage, setTokenToStorage} from "./services/token"
+import {getTokenFromStorage, setTokenToStorage, setUserIdToStorage} from "./services/token"
+import {like} from "./services/users"
+import {remove} from "./services/blogs"
 
 const App = () => {
   const [successMessage, setSuccessMessage] = useState('')
@@ -36,8 +38,10 @@ const App = () => {
       return
     }
     try {
-      const token = await doLogin({username, password})
-      setToken(token)
+      const user = await doLogin({username, password})
+      setToken(user.token)
+      setTokenToStorage(token)
+      setUserIdToStorage(user.id)
     } catch (e) {
       console.log(e)
       showErrorMessage('wrong username or password')
@@ -58,12 +62,12 @@ const App = () => {
     if (token) {
       const getBlogs = async () => {
         try {
-          const blogs = await getAll(token)
+          let blogs = await getAll()
+          blogs = blogs.sort((x, y) => y.likes - x.likes)
           setBlogs(blogs)
         } catch (e) {
           console.log(e)
-          setTokenToStorage('')
-          setToken('')
+          logoutHandler()
         }
       }
       getBlogs()
@@ -71,7 +75,8 @@ const App = () => {
   }, [token])
 
   const logoutHandler = () => {
-    window.localStorage.setItem('token', '')
+    setTokenToStorage('')
+    setUserIdToStorage('')
     setToken('')
   }
 
@@ -82,7 +87,7 @@ const App = () => {
       return
     }
     try {
-      const newBlog = await add(newBlogObj, token)
+      const newBlog = await add(newBlogObj)
       newBlogRef.current.hide()
       setBlogs([...blogs, newBlog])
       showSuccessMessage(`a new blog "${title} by ${author} added`)
@@ -101,6 +106,27 @@ const App = () => {
     setTimeout(() => setErrorMessage(''), timeout)
   }
 
+  const addLike = (blogId) => async () => {
+    try {
+      const updatedBlog = await like(blogId)
+      const blog = blogs.find(_ => _.id === blogId)
+      blog.likes = updatedBlog.likes
+      setBlogs(blogs.map(_ => _.id === blogId ? blog : _))
+    } catch (e) {
+      showErrorMessage(e.message)
+    }
+  }
+
+  const del = (blog) => async () => {
+    if (window.confirm(`Remove blog: ${blog.title} by ${blog.author}`)) {
+      try {
+        await remove(blog.id)
+        setBlogs(blogs.filter(_ => _.id !== blog.id))
+      } catch (e) {
+        showErrorMessage(e.message)
+      }
+    }
+  }
 
   const newBlogForm = () => {
     const newBlogButtonTitle = 'new blog'
@@ -125,7 +151,7 @@ const App = () => {
         <UserInfo loginForm={loginForm} logoutHandler={logoutHandler}/>
         {newBlogForm()}
         {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog}/>,
+          <Blog key={blog.id} blog={blog} addLike={addLike} del={del}/>,
         )}
       </div>
     )

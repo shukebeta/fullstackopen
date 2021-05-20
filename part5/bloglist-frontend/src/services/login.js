@@ -3,5 +3,5 @@ const baseUrl = '/api/login'
 
 export const doLogin = async (loginForm) => {
   const response = await axios.post(baseUrl, loginForm)
-  return response.data.token
+  return response.data
 }
