@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useRef} from 'react'
 import Blog from './components/Blog'
 import Login from "./components/Login"
 import UserInfo from "./components/UserInfo"
@@ -7,14 +7,19 @@ import {getAll, add} from "./services/blogs"
 import {SuccessMessage, ErrorMessage} from "./components/public/Notification"
 import NewBlog from "./components/NewBlog"
 import Togglable from "./components/public/Togglable"
+import {getTokenFromStorage, setTokenToStorage} from "./services/token"
 
 const App = () => {
+  const [successMessage, setSuccessMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
   const [token, setToken] = useState('')
-
+  const [blogs, setBlogs] = useState([])
   const [loginForm, setLoginForm] = useState({
     username: '',
     password: '',
   })
+  const newBlogRef = useRef()
+
   const onUsernameChange = (evt) => {
     setLoginForm({...loginForm, username: evt.target.value.trim()})
   }
@@ -40,22 +45,26 @@ const App = () => {
   }
 
   useEffect(() => {
-    const key = 'token'
-    const savedToken = window.localStorage.getItem(key)
+    const savedToken = getTokenFromStorage()
     if (token && !savedToken) {
-      window.localStorage.setItem(key, token)
+      setTokenToStorage(token)
     }
     if (!token && savedToken) {
       setToken(savedToken)
     }
   }, [token])
 
-  const [blogs, setBlogs] = useState([])
   useEffect(() => {
     if (token) {
       const getBlogs = async () => {
-        const blogs = await getAll(token)
-        setBlogs(blogs)
+        try {
+          const blogs = await getAll(token)
+          setBlogs(blogs)
+        } catch (e) {
+          console.log(e)
+          setTokenToStorage('')
+          setToken('')
+        }
       }
       getBlogs()
     }
@@ -66,23 +75,21 @@ const App = () => {
     setToken('')
   }
 
-  const emptyBlog = {
-    title: '',
-    author: '',
-    url: '',
+  const addBlog = async (newBlogObj) => {
+    const {title, url, author} = newBlogObj
+    if (!title || !url) {
+      showErrorMessage('title and url cannot be empty')
+      return
+    }
+    try {
+      const newBlog = await add(newBlogObj, token)
+      newBlogRef.current.hide()
+      setBlogs([...blogs, newBlog])
+      showSuccessMessage(`a new blog "${title} by ${author} added`)
+    } catch (e) {
+      showErrorMessage(e.message)
+    }
   }
-  const [blog, setBlog] = useState({
-    ...emptyBlog,
-  })
-
-  const onFieldChange = (fieldName) => (evt) => {
-    const newValue = {...blog}
-    newValue[fieldName] = evt.target.value
-    setBlog(newValue)
-  }
-
-  const [successMessage, setSuccessMessage] = useState('')
-  const [errorMessage, setErrorMessage] = useState('')
 
   const showSuccessMessage = (message, timeout = 3000) => {
     setSuccessMessage(message)
@@ -94,21 +101,14 @@ const App = () => {
     setTimeout(() => setErrorMessage(''), timeout)
   }
 
-  const onSubmitBlog = async (evt) => {
-    evt.preventDefault()
-    const {title, url, author} = blog
-    if (!title || !url) {
-      showErrorMessage('title and url cannot be empty')
-      return
-    }
-    try {
-      const newBlog = await add(blog, token)
-      setBlog({...emptyBlog})
-      setBlogs([...blogs, newBlog])
-      showSuccessMessage(`a new blog "${title} by ${author} added`)
-    } catch (e) {
-      showErrorMessage(e.message)
-    }
+
+  const newBlogForm = () => {
+    const newBlogButtonTitle = 'new blog'
+    return (
+      <Togglable buttonLabel={newBlogButtonTitle} ref={newBlogRef}>
+        <NewBlog addBlog={addBlog}/>
+      </Togglable>
+    )
   }
 
   if (!token) {
@@ -123,9 +123,7 @@ const App = () => {
         <ErrorMessage message={errorMessage}/>
         <SuccessMessage message={successMessage}/>
         <UserInfo loginForm={loginForm} logoutHandler={logoutHandler}/>
-        <Togglable buttonLabel="new blog">
-          <NewBlog values={{blog, showNewBlogForm}} events={{onFieldChange, onSubmitBlog}}/>
-        </Togglable>
+        {newBlogForm()}
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog}/>,
         )}

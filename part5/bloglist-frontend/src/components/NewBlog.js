@@ -1,11 +1,32 @@
-import React from 'react'
+import React, {useState} from 'react'
 
-const NewBlog = ({values, events}) => {
+const NewBlog = ({addBlog}) => {
+  const emptyBlog = {
+    title: '',
+    author: '',
+    url: '',
+  }
+  const [blog, setBlog] = useState({
+    ...emptyBlog,
+  })
+
+  const onFieldChange = (fieldName) => (evt) => {
+    const newValue = {...blog}
+    newValue[fieldName] = evt.target.value
+    setBlog(newValue)
+  }
+
+  const submitBlog = async (event) => {
+    event.preventDefault()
+    await addBlog({...blog})
+    setBlog({...emptyBlog})
+  }
+
   return (
-    <form onSubmit={events.onSubmitBlog}>
-      <div>title: <input value={values.blog.title} onChange={events.onFieldChange('title')}/></div>
-      <div>author: <input value={values.blog.author} onChange={events.onFieldChange('author')}/></div>
-      <div>url: <input value={values.blog.url} onChange={events.onFieldChange('url')}/></div>
+    <form onSubmit={submitBlog}>
+      <div>title: <input value={blog.title} onChange={onFieldChange('title')}/></div>
+      <div>author: <input value={blog.author} onChange={onFieldChange('author')}/></div>
+      <div>url: <input value={blog.url} onChange={onFieldChange('url')}/></div>
       <div>
         <button type="submit">create</button>
       </div>
