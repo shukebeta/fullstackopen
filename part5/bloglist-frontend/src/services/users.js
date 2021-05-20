@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {getTokenFromStorage} from "./token"
+import { getTokenFromStorage } from './token'
 const baseUrl = '/api/users'
 
 export const like = async (blogId) => {

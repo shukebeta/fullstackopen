@@ -1,3 +1,5 @@
+import React from 'react'
+import PropTypes from 'prop-types'
 export const ErrorMessage = ({ message }) => {
   if (message === '') {
     return null
@@ -8,6 +10,9 @@ export const ErrorMessage = ({ message }) => {
       {message}
     </div>
   )
+}
+ErrorMessage.propTypes = {
+  message: PropTypes.string.isRequired
 }
 
 export const SuccessMessage = ({ message }) => {
@@ -20,4 +25,7 @@ export const SuccessMessage = ({ message }) => {
       {message}
     </div>
   )
+}
+SuccessMessage.propTypes = {
+  message: PropTypes.string.isRequired
 }

@@ -1,4 +1,5 @@
-const UserInfo = ({loginForm, logoutHandler}) => (
+import React from 'react'
+const UserInfo = ({ loginForm, logoutHandler }) => (
   <p>{loginForm.username} logged in <button type="button" onClick={logoutHandler}>logout</button></p>
 )
 export default UserInfo

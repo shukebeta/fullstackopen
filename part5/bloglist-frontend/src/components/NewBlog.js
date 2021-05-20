@@ -1,6 +1,6 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
-const NewBlog = ({addBlog}) => {
+const NewBlog = ({ addBlog }) => {
   const emptyBlog = {
     title: '',
     author: '',
@@ -11,15 +11,15 @@ const NewBlog = ({addBlog}) => {
   })
 
   const onFieldChange = (fieldName) => (evt) => {
-    const newValue = {...blog}
+    const newValue = { ...blog }
     newValue[fieldName] = evt.target.value
     setBlog(newValue)
   }
 
   const submitBlog = async (event) => {
     event.preventDefault()
-    await addBlog({...blog})
-    setBlog({...emptyBlog})
+    await addBlog({ ...blog })
+    setBlog({ ...emptyBlog })
   }
 
   return (

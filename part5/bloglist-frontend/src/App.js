@@ -1,15 +1,15 @@
-import React, {useState, useEffect, useRef} from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
-import Login from "./components/Login"
-import UserInfo from "./components/UserInfo"
-import {doLogin} from './services/login'
-import {getAll, add} from "./services/blogs"
-import {SuccessMessage, ErrorMessage} from "./components/public/Notification"
-import NewBlog from "./components/NewBlog"
-import Togglable from "./components/public/Togglable"
-import {getTokenFromStorage, setTokenToStorage, setUserIdToStorage} from "./services/token"
-import {like} from "./services/users"
-import {remove} from "./services/blogs"
+import Login from './components/Login'
+import UserInfo from './components/UserInfo'
+import { doLogin } from './services/login'
+import { getAll, add } from './services/blogs'
+import { SuccessMessage, ErrorMessage } from './components/public/Notification'
+import NewBlog from './components/NewBlog'
+import Togglable from './components/public/Togglable'
+import { getTokenFromStorage, setTokenToStorage, setUserIdToStorage } from './services/token'
+import { like } from './services/users'
+import { remove } from './services/blogs'
 
 const App = () => {
   const [successMessage, setSuccessMessage] = useState('')
@@ -23,22 +23,22 @@ const App = () => {
   const newBlogRef = useRef()
 
   const onUsernameChange = (evt) => {
-    setLoginForm({...loginForm, username: evt.target.value.trim()})
+    setLoginForm({ ...loginForm, username: evt.target.value.trim() })
   }
   const onPasswordChange = (evt) => {
-    setLoginForm({...loginForm, password: evt.target.value})
+    setLoginForm({ ...loginForm, password: evt.target.value })
   }
 
   const loginHandler = async (evt) => {
     evt.preventDefault()
-    let {username, password} = loginForm
+    let { username, password } = loginForm
     username = username.trim()
     if (!username || !password) {
       showErrorMessage('username and password cannot be empty')
       return
     }
     try {
-      const user = await doLogin({username, password})
+      const user = await doLogin({ username, password })
       setToken(user.token)
       setTokenToStorage(token)
       setUserIdToStorage(user.id)
@@ -81,7 +81,7 @@ const App = () => {
   }
 
   const addBlog = async (newBlogObj) => {
-    const {title, url, author} = newBlogObj
+    const { title, url, author } = newBlogObj
     if (!title || !url) {
       showErrorMessage('title and url cannot be empty')
       return
@@ -139,8 +139,8 @@ const App = () => {
 
   if (!token) {
     return (
-      <Login values={{...loginForm, errorMessage, successMessage}}
-             events={{onUsernameChange, onPasswordChange, loginHandler}}/>
+      <Login values={{ ...loginForm, errorMessage, successMessage }}
+        events={{ onUsernameChange, onPasswordChange, loginHandler }}/>
     )
   } else {
     return (

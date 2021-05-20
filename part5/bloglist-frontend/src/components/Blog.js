@@ -1,15 +1,12 @@
-import React, {useState} from 'react'
-import {getUserIdFromStorage} from "../services/token"
+import React, { useState } from 'react'
+import { getUserIdFromStorage } from '../services/token'
 
-const Blog = ({blog, addLike, del}) => {
+const Blog = ({ blog, addLike, del }) => {
   const [visible, setVisible] = useState(false)
 
-  const showWhenVisible = {display: visible ? '' : 'none'}
+  const showWhenVisible = { display: visible ? '' : 'none' }
   const toggle = () => {
     setVisible(!visible)
-  }
-  const show = () => {
-    setVisible(true)
   }
   const hide = () => {
     setVisible(false)
