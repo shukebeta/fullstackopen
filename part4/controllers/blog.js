@@ -49,6 +49,7 @@ blogsRouter.delete('/:id', async (request, response) => {
     response.status(401).json({ message: 'Unauthorized' })
   }
 })
+
 blogsRouter.delete('/', async(request, response) => {
   if (request.user) {
     const user = await User.findById(request.user)

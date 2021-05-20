@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+mongoose.set('returnOriginal', false)
 
 const blogSchema = new mongoose.Schema({
   title: {
