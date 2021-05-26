@@ -4,7 +4,7 @@ import { getUserIdFromStorage } from '../services/token'
 const Blog = ({ blog, addLike, del }) => {
   const [visible, setVisible] = useState(false)
 
-  const showWhenVisible = { display: visible ? '' : 'none' }
+  const showWhenVisible = { display: visible ? 'block' : 'none' }
   const toggle = () => {
     setVisible(!visible)
   }

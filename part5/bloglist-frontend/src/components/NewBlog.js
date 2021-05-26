@@ -24,9 +24,9 @@ const NewBlog = ({ addBlog }) => {
 
   return (
     <form onSubmit={submitBlog}>
-      <div>title: <input value={blog.title} onChange={onFieldChange('title')}/></div>
-      <div>author: <input value={blog.author} onChange={onFieldChange('author')}/></div>
-      <div>url: <input value={blog.url} onChange={onFieldChange('url')}/></div>
+      <div>title: <input className="new-blog-title" value={blog.title} onChange={onFieldChange('title')}/></div>
+      <div>author: <input className="new-blog-author" value={blog.author} onChange={onFieldChange('author')}/></div>
+      <div>url: <input className="new-blog-url" value={blog.url} onChange={onFieldChange('url')}/></div>
       <div>
         <button type="submit">create</button>
       </div>
