@@ -144,7 +144,7 @@ const App = () => {
     )
   } else {
     return (
-      <div>
+      <div className="blogList">
         <h2>blogs</h2>
         <ErrorMessage message={errorMessage}/>
         <SuccessMessage message={successMessage}/>
